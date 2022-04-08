@@ -1,23 +1,24 @@
-console.log("Client side javascript file is loaded!");
+const searchValue = document.querySelector(".search-bar").value;
 
-const weatherForm = document.querySelector("form");
-const search = document.querySelector("input");
+const search = () => {
+  const targetUrl = `/forecast?address=${searchValue}`;
+};
 
-weatherForm.addEventListener("submit", (e) => {
-  e.preventDefault();
+console.log(searchValue);
 
-  const location = search.value;
-
-  fetch("http://localhost:3000/weather?address=" + location).then(
-    (response) => {
-      response.json().then((data) => {
-        if (data.error) {
-          console.log(data.error);
-        } else {
-          console.log(data.location);
-          console.log(data.forecast);
-        }
-      });
+fetch("http://localhost:3000/forecast?address=" + searchValue).then((res) => {
+  res.json().then((data) => {
+    if (data.error) {
+      console.log(data.error);
+    } else {
+      console.log(data.location);
+      document.querySelector(".temp").innerHTML = data.forecast;
     }
-  );
+  });
 });
+// document.querySelector("button").addEventListener("click", () => {
+// });
+// document.querySelector(".city").innerHTML = searchValue;
+// document.querySelector(".temp").innerHTML = data.forecast
+//   document.querySelector(".feels_like").innerHTML =
+//   document.querySelector(".current_condition").innerHTML =

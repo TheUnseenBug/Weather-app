@@ -1,24 +1,23 @@
-const request = require("request");
+import fetch from "node-fetch";
 
-const geocode = (address, callback) => {
+const geocode = async (address) => {
   const url =
     "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
     encodeURIComponent(address) +
     ".json?access_token=pk.eyJ1IjoidGhldW5zZWVuYnVnIiwiYSI6ImNsMW01dzhlMTAzZmIzaXFqeHMzdDEyZW4ifQ.pJBLiAsMZRLphQXHjG0Qow";
-  request({ url, json: true }, (error, { body }) => {
-    if (error) {
-      callback("Unable to connect to location services!", undefined);
-    } else if (body.features.length === 0) {
-      callback("Unable to find location", undefined);
-    } else {
-      callback(undefined, {
-        latitude: body.features[0].center[1],
-        longitude: body.features[0].center[0],
 
-        location: body.features[0].place_name,
-      });
-    }
+  const req = await fetch(url, {
+    method: "GET",
   });
+  const data = await req.json();
+  const latitude = data.features[0].center[1];
+  const longitude = data.features[0].center[0];
+  const location = data.features[0].place_name;
+  return {
+    latitude,
+    longitude,
+    location,
+  };
 };
 
-module.exports = geocode;
+export default geocode;
